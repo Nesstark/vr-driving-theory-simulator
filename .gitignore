@@ -65,13 +65,9 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# VS Code files for those working on multiple tools
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-!.vscode/*.code-snippets
+# VS Code
+.vscode/
+.vsconfig
 
 # Local History for Visual Studio Code
 .history/
