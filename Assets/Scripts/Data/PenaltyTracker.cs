@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public static class penaltyTracker
+public static class PenaltyTracker
 {
     private static int _penaltyFine = 0;
     private static int _penaltyPoints = 0;
