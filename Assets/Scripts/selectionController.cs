@@ -45,28 +45,25 @@ public class SelectionController : MonoBehaviour
         FindCorrectAnswer();
         RestorePreviousAnswers();
     }
-    
     private void InitializeButtons()
     {
-        for (int i = 0; i < buttonConfigs.Length; i++) {
-            if (buttonConfigs[i].button == null) continue;
+        for (int i = 0; i < buttonConfigs.Length; i++)
+        {
+            if (buttonConfigs[i].buttonAnimator == null) continue;
 
-            int index = i;
-            buttonConfigs[i].button.onClick.AddListener(() => ToggleButtonSelection(index));
-            
-            // Set default color
-            SetButtonColor(index, buttonConfigs[index].defaultColor);
+            // Set default state through animator
+            SetButtonState(i, false);
         }
-        
-        // Initialize confirm button
-        if (confirmButton != null) {
+
+        // Initialize confirm button (if using UI)
+        if (confirmButton != null)
+        {
             confirmButton.onClick.AddListener(ConfirmSelection);
         }
-        
+
         // Initialize navigation buttons
         SetupNavigationButtons();
     }
-    
     private void FindCorrectAnswer()
     {
         for (int i = 0; i < buttonConfigs.Length; i++) {
@@ -83,19 +80,16 @@ public class SelectionController : MonoBehaviour
         if (buttonIndex < 0 || buttonIndex >= buttonConfigs.Length) return;
         
         ButtonConfig button = buttonConfigs[buttonIndex];
-        if (button.button == null) return;
+        if (button.buttonAnimator == null) return;
         
         // If not allowing multiple selections, clear other selections first
         if (!allowMultipleSelections && !button.isSelected) {
             ClearAllSelections();
         }
         
-        // Toggle the selection
         button.isSelected = !button.isSelected;
         
-        // Update visual feedback
-        Color targetColor = button.isSelected ? button.selectedColor : button.defaultColor;
-        SetButtonColor(buttonIndex, targetColor);
+        SetButtonState(buttonIndex, button.isSelected);
         
         OnSelectionChanged?.Invoke();
     }
@@ -106,10 +100,8 @@ public class SelectionController : MonoBehaviour
         
         bool answeredCorrectly = CheckIfAnsweredCorrectly();
         
-        // Log answer check details when confirming
         LogAnswerCheck();
         
-        // Save the result without applying penalties (penalties applied only on final confirm)
         SaveCurrentResult(answeredCorrectly, false); // false = don't apply penalties
         
         if (answeredCorrectly) {
@@ -194,17 +186,13 @@ public class SelectionController : MonoBehaviour
         Debug.Log(PenaltyTracker.GetPenaltySummary());
     }
     
-    private void SetButtonColor(int buttonIndex, Color color)
+    private void SetButtonState(int buttonIndex, bool isSelected)
     {
         if (buttonIndex < 0 || buttonIndex >= buttonConfigs.Length) return;
-        if (buttonConfigs[buttonIndex].button == null) return;
+        if (buttonConfigs[buttonIndex].buttonAnimator == null) return;
         
-        var colors = buttonConfigs[buttonIndex].button.colors;
-        colors.normalColor = color;
-        colors.highlightedColor = color * 1.1f; // Slightly brighter when hovered
-        colors.pressedColor = color * 0.9f; // Slightly darker when pressed
-        colors.selectedColor = color; // Same as normal for selected state
-        buttonConfigs[buttonIndex].button.colors = colors;
+        // Set the animator's isPressed bool to control animation/color
+        buttonConfigs[buttonIndex].buttonAnimator.SetBool("isPressed", isSelected);
     }
     
     private void ClearAllSelections()
@@ -212,7 +200,7 @@ public class SelectionController : MonoBehaviour
         for (int i = 0; i < buttonConfigs.Length; i++) {
             if (buttonConfigs[i].isSelected) {
                 buttonConfigs[i].isSelected = false;
-                SetButtonColor(i, buttonConfigs[i].defaultColor);
+                SetButtonState(i, false);
             }
         }
     }
@@ -281,14 +269,15 @@ public class SelectionController : MonoBehaviour
         
         // Get button texts (if available)
         for (int i = 0; i < buttonConfigs.Length; i++) {
-            if (buttonConfigs[i].button != null) {
-                var textComponent = buttonConfigs[i].button.GetComponentInChildren<Text>();
+            if (buttonConfigs[i].buttonAnimator != null) {
+                // Try to get text from child Text component
+                var textComponent = buttonConfigs[i].buttonAnimator.GetComponentInChildren<Text>();
                 if (textComponent != null) {
                     result.buttonTexts[i] = textComponent.text;
                 }
                 else {
                     // Try TMPro text component
-                    var tmpTextComponent = buttonConfigs[i].button.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+                    var tmpTextComponent = buttonConfigs[i].buttonAnimator.GetComponentInChildren<TMPro.TextMeshProUGUI>();
                     if (tmpTextComponent != null) {
                         result.buttonTexts[i] = tmpTextComponent.text;
                     }
@@ -296,6 +285,9 @@ public class SelectionController : MonoBehaviour
                         result.buttonTexts[i] = $"Button {i + 1}";
                     }
                 }
+            }
+            else {
+                result.buttonTexts[i] = $"Button {i + 1}";
             }
         }
         
@@ -340,7 +332,7 @@ public class SelectionController : MonoBehaviour
             int buttonIndex = savedResult.selectedButtonIndices[i];
             if (buttonIndex >= 0 && buttonIndex < buttonConfigs.Length) {
                 buttonConfigs[buttonIndex].isSelected = true;
-                SetButtonColor(buttonIndex, buttonConfigs[buttonIndex].selectedColor);
+                SetButtonState(buttonIndex, true);
             }
         }
         
