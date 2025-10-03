@@ -8,8 +8,12 @@ public class VRButtonInteractor : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        Debug.Log($"Collider entered: {other.name} with tag {other.tag}");
         if (other.CompareTag("Hand") || other.CompareTag("Controller"))
+        {
             controller.ToggleButtonSelection(buttonIndex);
+            Debug.Log($"Button {buttonIndex} pressed.");
+        }
     }
 
     void Start()
