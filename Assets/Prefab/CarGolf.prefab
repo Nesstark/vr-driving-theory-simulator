@@ -148,6 +148,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonIndex: 1
   controller: {fileID: 0}
+  pressedColor: {r: 0, g: 1, b: 0, a: 1}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &451914209652071469
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,6 +298,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonIndex: 3
   controller: {fileID: 0}
+  pressedColor: {r: 0, g: 1, b: 0, a: 1}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &543707115665055833
 GameObject:
   m_ObjectHideFlags: 0
@@ -580,6 +584,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonIndex: 2
   controller: {fileID: 0}
+  pressedColor: {r: 0, g: 1, b: 0, a: 1}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &668868478095644922
 GameObject:
   m_ObjectHideFlags: 0
@@ -3830,6 +3836,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonIndex: 0
   controller: {fileID: 0}
+  pressedColor: {r: 0, g: 1, b: 0, a: 1}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &7311750902883748622
 GameObject:
   m_ObjectHideFlags: 0
@@ -4774,15 +4782,15 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 7e018d3af08ff9b44be70f7b24c87f9a, type: 2}
     - target: {fileID: -8679921383154817045, guid: e5335ec83f030f64dbe08832c06cf062, type: 3}
       propertyPath: m_LocalScale.x
-      value: 7.5620656
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e5335ec83f030f64dbe08832c06cf062, type: 3}
       propertyPath: m_LocalScale.y
-      value: 3331.8457
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e5335ec83f030f64dbe08832c06cf062, type: 3}
       propertyPath: m_LocalScale.z
-      value: 7.5620656
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e5335ec83f030f64dbe08832c06cf062, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4826,7 +4834,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e5335ec83f030f64dbe08832c06cf062, type: 3}
       propertyPath: m_ConstrainProportionsScale
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7346931633858791735, guid: e5335ec83f030f64dbe08832c06cf062, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -5217,33 +5225,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6776387620669995973}
     m_Modifications:
-    - target: {fileID: 3885419093246695711, guid: 7de393cf328200c4ba05e2439f49bfb1, type: 3}
-      propertyPath: field of view
-      value: 60.000004
-      objectReference: {fileID: 0}
-    - target: {fileID: 3885419093246695711, guid: 7de393cf328200c4ba05e2439f49bfb1, type: 3}
-      propertyPath: m_FocalLength
-      value: 20.78461
-      objectReference: {fileID: 0}
-    - target: {fileID: 3885419093246695711, guid: 7de393cf328200c4ba05e2439f49bfb1, type: 3}
-      propertyPath: m_projectionMatrixMode
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5796482305532472394, guid: 7de393cf328200c4ba05e2439f49bfb1, type: 3}
       propertyPath: m_Name
       value: Right mirror
-      objectReference: {fileID: 0}
-    - target: {fileID: 8937508788645979854, guid: 7de393cf328200c4ba05e2439f49bfb1, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8937508788645979854, guid: 7de393cf328200c4ba05e2439f49bfb1, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8937508788645979854, guid: 7de393cf328200c4ba05e2439f49bfb1, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8937508788645979854, guid: 7de393cf328200c4ba05e2439f49bfb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5284,10 +5268,6 @@ PrefabInstance:
     - target: {fileID: 8937508788645979854, guid: 7de393cf328200c4ba05e2439f49bfb1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8937508788645979854, guid: 7de393cf328200c4ba05e2439f49bfb1, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
