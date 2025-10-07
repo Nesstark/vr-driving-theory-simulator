@@ -5,8 +5,12 @@ using UnityEngine;
 public class ButtonConfig
 {
     [Header("VR Button Settings")]
-    public Animator buttonAnimator;  // Instead of UI Button
+    public GameObject textGameObject;      // The GameObject containing the text component
+    public GameObject buttonGameObject;    // The GameObject with the physical button (VRButtonInteractor)
     public bool isCorrectAnswer = false;
+    
+    [Header("Answer Text")]
+    public string buttonText = "";
     
     [Header("Penalty Settings")]
     public int fineAmount = 0;

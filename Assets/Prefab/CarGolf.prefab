@@ -928,7 +928,7 @@ GameObject:
   - component: {fileID: 8649136356387933747}
   - component: {fileID: 186223153324952866}
   m_Layer: 0
-  m_Name: Button base
+  m_Name: ButtonBase1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1014,7 +1014,7 @@ GameObject:
   - component: {fileID: 8829563841636995757}
   - component: {fileID: 8752150186948767146}
   m_Layer: 5
-  m_Name: Text Area
+  m_Name: ButtonText3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1106,23 +1106,31 @@ MonoBehaviour:
   questionId: 0
   questionText: 
   buttonConfigs:
-  - buttonAnimator: {fileID: 8939860438566966605}
+  - textGameObject: {fileID: 3588847317147991246}
+    buttonGameObject: {fileID: 2704155101264253657}
     isCorrectAnswer: 0
+    buttonText: 123
     fineAmount: 0
     penaltyPoints: 0
     isSelected: 0
-  - buttonAnimator: {fileID: 8533011615561698582}
+  - textGameObject: {fileID: 4686803715239751035}
+    buttonGameObject: {fileID: 7440707444380685186}
     isCorrectAnswer: 0
+    buttonText: 234
     fineAmount: 0
     penaltyPoints: 0
     isSelected: 0
-  - buttonAnimator: {fileID: 6131040028094931540}
+  - textGameObject: {fileID: 3114106850130872035}
+    buttonGameObject: {fileID: 6132699769130428623}
     isCorrectAnswer: 0
+    buttonText: 345
     fineAmount: 0
     penaltyPoints: 0
     isSelected: 0
-  - buttonAnimator: {fileID: 3707465596240938563}
+  - textGameObject: {fileID: 7590751092498325000}
+    buttonGameObject: {fileID: 5190083535111323067}
     isCorrectAnswer: 0
+    buttonText: 456
     fineAmount: 0
     penaltyPoints: 0
     isSelected: 0
@@ -1495,7 +1503,7 @@ GameObject:
   - component: {fileID: 2954163862113457434}
   - component: {fileID: 4121828725417294023}
   m_Layer: 5
-  m_Name: Text Area
+  m_Name: ButtonText1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1923,7 +1931,7 @@ GameObject:
   - component: {fileID: 7568196008771720711}
   - component: {fileID: 1349411372428875303}
   m_Layer: 5
-  m_Name: Text Area
+  m_Name: ButtonText2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2155,7 +2163,7 @@ GameObject:
   - component: {fileID: 8894486686432280183}
   - component: {fileID: 7548015943808044693}
   m_Layer: 0
-  m_Name: Button base (3)
+  m_Name: ButtonBase4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2378,7 +2386,7 @@ GameObject:
   - component: {fileID: 4806237386665001529}
   - component: {fileID: 7469368537718214900}
   m_Layer: 0
-  m_Name: Button base (2)
+  m_Name: ButtonBase3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3108,7 +3116,7 @@ GameObject:
   - component: {fileID: 5585640471119725083}
   - component: {fileID: 920731975255796750}
   m_Layer: 0
-  m_Name: Button base (1)
+  m_Name: ButtonBase2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3194,7 +3202,7 @@ GameObject:
   - component: {fileID: 218265541268058820}
   - component: {fileID: 2513579713844422692}
   m_Layer: 5
-  m_Name: Text Area
+  m_Name: ButtonText4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3810,7 +3818,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: baa980aaebb3a5345a75bf46c7f0eb57, type: 2}
     - target: {fileID: 919132149155446097, guid: e5335ec83f030f64dbe08832c06cf062, type: 3}
       propertyPath: m_Name
-      value: FINAL_MODEL_IV_R32 1
+      value: CarGolf
       objectReference: {fileID: 0}
     - target: {fileID: 2412909718840555064, guid: e5335ec83f030f64dbe08832c06cf062, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'

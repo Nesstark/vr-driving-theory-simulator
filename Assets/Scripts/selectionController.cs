@@ -45,25 +45,26 @@ public class SelectionController : MonoBehaviour
         FindCorrectAnswer();
         RestorePreviousAnswers();
     }
+
     private void InitializeButtons()
     {
-        for (int i = 0; i < buttonConfigs.Length; i++)
-        {
-            if (buttonConfigs[i].buttonAnimator == null) continue;
+        for (int i = 0; i < buttonConfigs.Length; i++) {
+            if (buttonConfigs[i].buttonGameObject == null) continue;
 
-            // Set default state through animator
+            if (buttonConfigs[i].textGameObject != null) {
+                SetButtonText(i, buttonConfigs[i].buttonText);
+            }
+            
             SetButtonState(i, false);
         }
 
-        // Initialize confirm button (if using UI)
-        if (confirmButton != null)
-        {
+        if (confirmButton != null) {
             confirmButton.onClick.AddListener(ConfirmSelection);
         }
 
-        // Initialize navigation buttons
         SetupNavigationButtons();
     }
+
     private void FindCorrectAnswer()
     {
         for (int i = 0; i < buttonConfigs.Length; i++) {
@@ -72,43 +73,130 @@ public class SelectionController : MonoBehaviour
             break;
         }
     }
-    
+
+    private void RestorePreviousAnswers()
+    {
+        var savedResult = QuestionResults.GetResult(questionId);
+        if (savedResult == null) return;
+
+        for (int i = 0; i < savedResult.selectedButtonIndices.Length; i++) {
+            int buttonIndex = savedResult.selectedButtonIndices[i];
+            if (buttonIndex < 0 || buttonIndex >= buttonConfigs.Length) continue;
+            
+            buttonConfigs[buttonIndex].isSelected = true;
+            SetButtonState(buttonIndex, true);
+        }
+
+        if (savedResult.wasConfirmed) {
+            selectionConfirmed = true;
+            Debug.Log($"[Question {questionId}] Previous answer restored: {(savedResult.wasAnsweredCorrectly ? "Correct" : "Incorrect")}");
+        }
+    }
+
     public void ToggleButtonSelection(int buttonIndex)
     {
-        if (selectionConfirmed) return;
+        if (selectionConfirmed) {
+            Debug.Log("Selection has already been confirmed");
+            return;
+        }
             
-        if (buttonIndex < 0 || buttonIndex >= buttonConfigs.Length) return;
-        
+        if (buttonIndex < 0 || buttonIndex >= buttonConfigs.Length) {
+            Debug.LogWarning($"Invalid button index: {buttonIndex}");
+            return;
+        }
+
         ButtonConfig button = buttonConfigs[buttonIndex];
-        if (button.buttonAnimator == null) return;
-        
-        // If not allowing multiple selections, clear other selections first
+        if (button.buttonGameObject == null) {
+            Debug.LogWarning($"Button GameObject is not assigned for button index: {buttonIndex}");
+            return;
+        }
+
         if (!allowMultipleSelections && !button.isSelected) {
+            Debug.Log("Clearing other selections due to single-selection mode");
             ClearAllSelections();
         }
         
         button.isSelected = !button.isSelected;
-        
         SetButtonState(buttonIndex, button.isSelected);
-        
         OnSelectionChanged?.Invoke();
     }
-    
+
+    private void SetButtonState(int buttonIndex, bool isSelected)
+    {
+        if (buttonIndex < 0 || buttonIndex >= buttonConfigs.Length) {
+            Debug.LogWarning($"Invalid button index: {buttonIndex}");
+            return;
+        }
+        
+        if (buttonConfigs[buttonIndex].buttonGameObject == null) {
+            Debug.LogWarning($"Button GameObject is not assigned for button index: {buttonIndex}");
+            return;
+        }
+
+        Debug.Log($"Setting button {buttonIndex} state to: {isSelected}");
+
+        // Look for Animator on the buttonGameObject itself or its children
+        var animator = buttonConfigs[buttonIndex].buttonGameObject.GetComponentInChildren<Animator>();
+        if (animator != null) {
+            animator.SetBool("isPressed", isSelected);
+            Debug.Log($"Animator found and isPressed set to {isSelected} for button {buttonIndex}");
+        } else {
+            Debug.LogWarning($"No Animator component found on button {buttonIndex} or its children");
+        }
+        
+        // Look for VRButtonInteractor on the buttonGameObject itself or its children
+        var vrButtonInteractor = buttonConfigs[buttonIndex].buttonGameObject.GetComponentInChildren<VRButtonInteractor>();
+        if (vrButtonInteractor != null) {
+            vrButtonInteractor.SetButtonPressed(isSelected);
+            Debug.Log($"VRButtonInteractor found and SetButtonPressed({isSelected}) called for button {buttonIndex}");
+        } else {
+            Debug.LogWarning($"No VRButtonInteractor component found on button {buttonIndex} or its children");
+        }
+    }
+
+    private void SetButtonText(int buttonIndex, string text)
+    {
+        if (buttonIndex < 0 || buttonIndex >= buttonConfigs.Length) return;
+        if (buttonConfigs[buttonIndex].textGameObject == null) return;
+        if (string.IsNullOrEmpty(text)) return;
+        
+        var textComponent = buttonConfigs[buttonIndex].textGameObject.GetComponentInChildren<Text>();
+        if (textComponent != null) {
+            textComponent.text = text;
+            return;
+        }
+        
+        var tmpTextComponent = buttonConfigs[buttonIndex].textGameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+        if (tmpTextComponent != null) {
+            tmpTextComponent.text = text;
+            return;
+        }
+        
+        Debug.LogWarning($"No Text or TextMeshProUGUI component found on text GameObject for button {buttonIndex} ({buttonConfigs[buttonIndex].textGameObject.name}). Text '{text}' could not be set.");
+    }
+
+    private void ClearAllSelections()
+    {
+        for (int i = 0; i < buttonConfigs.Length; i++) {
+            if (!buttonConfigs[i].isSelected) continue;
+            
+            buttonConfigs[i].isSelected = false;
+            SetButtonState(i, false);
+        }
+    }
+
     public void ConfirmSelection()
     {
         if (selectionConfirmed) return;
         
         bool answeredCorrectly = CheckIfAnsweredCorrectly();
-        
         LogAnswerCheck();
-        
-        SaveCurrentResult(answeredCorrectly, false); // false = don't apply penalties
+        SaveCurrentResult(answeredCorrectly, false);
         
         if (answeredCorrectly) {
             Debug.Log($"[Question {questionId}] Answered correctly!");
             OnCorrectSelection?.Invoke();
-        }
-        else {
+        } else {
             Debug.Log($"[Question {questionId}] Answered incorrectly.");
             OnIncorrectSelection?.Invoke();
         }
@@ -120,7 +208,30 @@ public class SelectionController : MonoBehaviour
             Invoke(nameof(ResetSelection), feedbackDuration);
         }
     }
-    
+
+    private bool CheckIfAnsweredCorrectly()
+    {
+        int totalCorrectAnswers = 0;
+        int selectedCorrectAnswers = 0;
+        int selectedIncorrectAnswers = 0;
+        
+        for (int i = 0; i < buttonConfigs.Length; i++) {
+            if (buttonConfigs[i].isCorrectAnswer) {
+                totalCorrectAnswers++;
+                if (buttonConfigs[i].isSelected) {
+                    selectedCorrectAnswers++;
+                }
+            } else if (buttonConfigs[i].isSelected) {
+                selectedIncorrectAnswers++;
+            }
+        }
+        
+        bool allCorrectSelected = (selectedCorrectAnswers == totalCorrectAnswers);
+        bool noIncorrectSelected = (selectedIncorrectAnswers == 0);
+        
+        return allCorrectSelected && noIncorrectSelected;
+    }
+
     private void LogAnswerCheck()
     {
         int totalCorrectAnswers = 0;
@@ -133,84 +244,155 @@ public class SelectionController : MonoBehaviour
                 if (buttonConfigs[i].isSelected) {
                     selectedCorrectAnswers++;
                 }
-            }
-            else if (buttonConfigs[i].isSelected) {
+            } else if (buttonConfigs[i].isSelected) {
                 selectedIncorrectAnswers++;
             }
         }
         
         Debug.Log($"[Question {questionId}] Answer check: {selectedCorrectAnswers}/{totalCorrectAnswers} correct selected, {selectedIncorrectAnswers} incorrect selected");
     }
-    
-    private bool CheckIfAnsweredCorrectly()
-    {
-        // Count correct and incorrect answers
-        int totalCorrectAnswers = 0;
-        int selectedCorrectAnswers = 0;
-        int selectedIncorrectAnswers = 0;
-        
-        for (int i = 0; i < buttonConfigs.Length; i++) {
-            if (buttonConfigs[i].isCorrectAnswer) {
-                totalCorrectAnswers++;
-                if (buttonConfigs[i].isSelected) {
-                    selectedCorrectAnswers++;
-                }
-            }
-            else if (buttonConfigs[i].isSelected) {
-                selectedIncorrectAnswers++;
-            }
-        }
-        
-        // Must select ALL correct answers AND NO incorrect answers
-        bool allCorrectSelected = (selectedCorrectAnswers == totalCorrectAnswers);
-        bool noIncorrectSelected = (selectedIncorrectAnswers == 0);
-        
-        return allCorrectSelected && noIncorrectSelected;
-    }
-    
-    private void ApplyPenalty(int buttonIndex)
-    {
-        ButtonConfig incorrectButton = buttonConfigs[buttonIndex];
-        
-        int fineToApply = incorrectButton.fineAmount > 0 ? incorrectButton.fineAmount : defaultFineAmount;
-        int pointsToApply = incorrectButton.penaltyPoints > 0 ? incorrectButton.penaltyPoints : defaultPenaltyPoints;
-        
-        if (pointsToApply > 0) {
-            PenaltyTracker.AddPenalty(fineToApply, pointsToApply);
-        }
-        else {
-            PenaltyTracker.AddPenalty(fineToApply);
-        }
-        
-        Debug.Log($"Penalty applied: ${fineToApply} fine, {pointsToApply} points");
-        Debug.Log(PenaltyTracker.GetPenaltySummary());
-    }
-    
-    private void SetButtonState(int buttonIndex, bool isSelected)
-    {
-        if (buttonIndex < 0 || buttonIndex >= buttonConfigs.Length) return;
-        if (buttonConfigs[buttonIndex].buttonAnimator == null) return;
-        
-        // Set the animator's isPressed bool to control animation/color
-        buttonConfigs[buttonIndex].buttonAnimator.SetBool("isPressed", isSelected);
-    }
-    
-    private void ClearAllSelections()
-    {
-        for (int i = 0; i < buttonConfigs.Length; i++) {
-            if (buttonConfigs[i].isSelected) {
-                buttonConfigs[i].isSelected = false;
-                SetButtonState(i, false);
-            }
-        }
-    }
-    
+
     public void ResetSelection()
     {
         selectionConfirmed = false;
         ClearAllSelections();
     }
+
+    private void SaveCurrentResult(bool answeredCorrectly, bool applyPenalties = true)
+    {
+        var result = new QuestionResult(questionId);
+        
+        var selectedIndices = new List<int>();
+        for (int i = 0; i < buttonConfigs.Length; i++) {
+            if (buttonConfigs[i].isSelected) {
+                selectedIndices.Add(i);
+            }
+        }
+        result.selectedButtonIndices = selectedIndices.ToArray();
+        
+        var correctIndices = new List<int>();
+        for (int i = 0; i < buttonConfigs.Length; i++) {
+            if (buttonConfigs[i].isCorrectAnswer) {
+                correctIndices.Add(i);
+            }
+        }
+        result.correctButtonIndices = correctIndices.ToArray();
+        
+        for (int i = 0; i < buttonConfigs.Length; i++) {
+            result.buttonTexts[i] = GetButtonText(i);
+        }
+        
+        result.wasAnsweredCorrectly = answeredCorrectly;
+        result.wasConfirmed = selectionConfirmed;
+        
+        int totalFine = 0;
+        int totalPoints = 0;
+        for (int i = 0; i < buttonConfigs.Length; i++) {
+            if (!buttonConfigs[i].isSelected || buttonConfigs[i].isCorrectAnswer) continue;
+            
+            int fine = buttonConfigs[i].fineAmount > 0 ? buttonConfigs[i].fineAmount : defaultFineAmount;
+            int points = buttonConfigs[i].penaltyPoints > 0 ? buttonConfigs[i].penaltyPoints : defaultPenaltyPoints;
+            totalFine += fine;
+            totalPoints += points;
+        }
+        result.penaltyFineApplied = totalFine;
+        result.penaltyPointsApplied = totalPoints;
+        
+        if (applyPenalties && !answeredCorrectly) {
+            if (totalPoints > 0) {
+                PenaltyTracker.AddPenalty(totalFine, totalPoints);
+            } else {
+                PenaltyTracker.AddPenalty(totalFine);
+            }
+            Debug.Log($"[Question {questionId}] Penalty applied: ${totalFine} fine, {totalPoints} points");
+        }
+        
+        QuestionResults.SaveResult(result);
+    }
+
+    private string GetButtonText(int buttonIndex)
+    {
+        if (buttonConfigs[buttonIndex].textGameObject == null) {
+            return $"Button {buttonIndex + 1}";
+        }
+        
+        var textComponent = buttonConfigs[buttonIndex].textGameObject.GetComponentInChildren<Text>();
+        if (textComponent != null) {
+            return textComponent.text;
+        }
+        
+        var tmpTextComponent = buttonConfigs[buttonIndex].textGameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+        if (tmpTextComponent != null) {
+            return tmpTextComponent.text;
+        }
+        
+        return $"Button {buttonIndex + 1}";
+    }
+
+    public void SaveCurrentSelections()
+    {
+        bool answeredCorrectly = CheckIfAnsweredCorrectly();
+        SaveCurrentResult(answeredCorrectly, false);
+        Debug.Log($"Saved selections for question {questionId}");
+    }
+
+    private void SetupNavigationButtons()
+    {
+        if (previousButton != null) {
+            if (string.IsNullOrEmpty(previousSceneName)) {
+                previousButton.interactable = false;
+            } else {
+                previousButton.onClick.AddListener(() => SaveAndNavigateToPrevious(previousSceneName));
+                previousButton.interactable = true;
+            }
+        }
+        
+        if (nextButton != null) {
+            if (string.IsNullOrEmpty(nextSceneName)) {
+                nextButton.interactable = false;
+            } else {
+                nextButton.onClick.AddListener(() => SaveAndNavigateToNext(nextSceneName));
+                nextButton.interactable = true;
+            }
+        }
+    }
+
+    public void SaveAndNavigateToNext(string nextSceneName = "")
+    {
+        SaveCurrentSelections();
+        
+        if (string.IsNullOrEmpty(nextSceneName)) {
+            Debug.LogWarning("Next scene name not provided. Navigation cancelled.");
+            return;
+        }
+        
+        Debug.Log($"Navigating to: {nextSceneName}");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(nextSceneName);
+    }
     
+    public void SaveAndNavigateToPrevious(string previousSceneName = "")
+    {
+        SaveCurrentSelections();
+        
+        if (string.IsNullOrEmpty(previousSceneName)) {
+            Debug.LogWarning("Previous scene name not provided. Navigation cancelled.");
+            return;
+        }
+        
+        Debug.Log($"Navigating to: {previousSceneName}");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(previousSceneName);
+    }
+
+    private bool SceneExistsInBuild(string sceneName)
+    {
+        for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings; i++) {
+            string scenePath = UnityEngine.SceneManagement.SceneUtility.GetScenePathByBuildIndex(i);
+            string sceneNameFromPath = System.IO.Path.GetFileNameWithoutExtension(scenePath);
+            if (sceneNameFromPath == sceneName) return true;
+        }
+        return false;
+    }
+
     public void SetCorrectAnswer(int buttonIndex)
     {
         if (correctAnswerIndex >= 0) {
@@ -237,113 +419,6 @@ public class SelectionController : MonoBehaviour
         defaultPenaltyPoints = penaltyPoints;
     }
     
-    public bool HasSelectionBeenMade()
-    {
-        for (int i = 0; i < buttonConfigs.Length; i++) {
-            if (buttonConfigs[i].isSelected) return true;
-        }
-        return false;
-    }
-    
-    private void SaveCurrentResult(bool answeredCorrectly, bool applyPenalties = true)
-    {
-        var result = new QuestionResult(questionId);
-        
-        // Get selected button indices
-        var selectedIndices = new List<int>();
-        for (int i = 0; i < buttonConfigs.Length; i++) {
-            if (buttonConfigs[i].isSelected) {
-                selectedIndices.Add(i);
-            }
-        }
-        result.selectedButtonIndices = selectedIndices.ToArray();
-        
-        // Get correct button indices
-        var correctIndices = new List<int>();
-        for (int i = 0; i < buttonConfigs.Length; i++) {
-            if (buttonConfigs[i].isCorrectAnswer) {
-                correctIndices.Add(i);
-            }
-        }
-        result.correctButtonIndices = correctIndices.ToArray();
-        
-        // Get button texts (if available)
-        for (int i = 0; i < buttonConfigs.Length; i++) {
-            if (buttonConfigs[i].buttonAnimator != null) {
-                // Try to get text from child Text component
-                var textComponent = buttonConfigs[i].buttonAnimator.GetComponentInChildren<Text>();
-                if (textComponent != null) {
-                    result.buttonTexts[i] = textComponent.text;
-                }
-                else {
-                    // Try TMPro text component
-                    var tmpTextComponent = buttonConfigs[i].buttonAnimator.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-                    if (tmpTextComponent != null) {
-                        result.buttonTexts[i] = tmpTextComponent.text;
-                    }
-                    else {
-                        result.buttonTexts[i] = $"Button {i + 1}";
-                    }
-                }
-            }
-            else {
-                result.buttonTexts[i] = $"Button {i + 1}";
-            }
-        }
-        
-        result.wasAnsweredCorrectly = answeredCorrectly;
-        result.wasConfirmed = selectionConfirmed;
-        
-        // Calculate penalties (but only apply if requested)
-        int totalFine = 0;
-        int totalPoints = 0;
-        for (int i = 0; i < buttonConfigs.Length; i++) {
-            if (buttonConfigs[i].isSelected && !buttonConfigs[i].isCorrectAnswer) {
-                int fine = buttonConfigs[i].fineAmount > 0 ? buttonConfigs[i].fineAmount : defaultFineAmount;
-                int points = buttonConfigs[i].penaltyPoints > 0 ? buttonConfigs[i].penaltyPoints : defaultPenaltyPoints;
-                totalFine += fine;
-                totalPoints += points;
-            }
-        }
-        result.penaltyFineApplied = totalFine;
-        result.penaltyPointsApplied = totalPoints;
-        
-        // Only apply penalties to penaltyTracker if requested
-        if (applyPenalties && !answeredCorrectly) {
-            if (totalPoints > 0) {
-                PenaltyTracker.AddPenalty(totalFine, totalPoints);
-            }
-            else {
-                PenaltyTracker.AddPenalty(totalFine);
-            }
-            Debug.Log($"[Question {questionId}] Penalty applied: ${totalFine} fine, {totalPoints} points");
-        }
-        
-        QuestionResults.SaveResult(result);
-    }
-    
-    private void RestorePreviousAnswers()
-    {
-        var savedResult = QuestionResults.GetResult(questionId);
-        if (savedResult == null) return;
-        
-        // Restore button selections
-        for (int i = 0; i < savedResult.selectedButtonIndices.Length; i++) {
-            int buttonIndex = savedResult.selectedButtonIndices[i];
-            if (buttonIndex >= 0 && buttonIndex < buttonConfigs.Length) {
-                buttonConfigs[buttonIndex].isSelected = true;
-                SetButtonState(buttonIndex, true);
-            }
-        }
-        
-        // Restore confirmation state
-        if (savedResult.wasConfirmed) {
-            selectionConfirmed = true;
-            Debug.Log($"[Question {questionId}] Previous answer restored: {(savedResult.wasAnsweredCorrectly ? "Correct" : "Incorrect")}");
-        }
-    }
-    
-    // New utility methods
     public void SetQuestionId(int id)
     {
         questionId = id;
@@ -363,6 +438,14 @@ public class SelectionController : MonoBehaviour
     {
         return questionText;
     }
+
+    public bool HasSelectionBeenMade()
+    {
+        for (int i = 0; i < buttonConfigs.Length; i++) {
+            if (buttonConfigs[i].isSelected) return true;
+        }
+        return false;
+    }
     
     public bool WasAnswered()
     {
@@ -375,81 +458,24 @@ public class SelectionController : MonoBehaviour
         var result = QuestionResults.GetResult(questionId);
         return result != null && result.wasConfirmed && result.wasAnsweredCorrectly;
     }
-    
-    private void SetupNavigationButtons()
+
+    private void ApplyPenalty(int buttonIndex)
     {
-        // Setup Previous button
-        if (previousButton != null) {
-            if (string.IsNullOrEmpty(previousSceneName)) {
-                previousButton.interactable = false;
-            }
-            else {
-                previousButton.onClick.AddListener(() => SaveAndNavigateToPrevious(previousSceneName));
-                previousButton.interactable = true;
-            }
+        ButtonConfig incorrectButton = buttonConfigs[buttonIndex];
+        
+        int fineToApply = incorrectButton.fineAmount > 0 ? incorrectButton.fineAmount : defaultFineAmount;
+        int pointsToApply = incorrectButton.penaltyPoints > 0 ? incorrectButton.penaltyPoints : defaultPenaltyPoints;
+        
+        if (pointsToApply > 0) {
+            PenaltyTracker.AddPenalty(fineToApply, pointsToApply);
+        } else {
+            PenaltyTracker.AddPenalty(fineToApply);
         }
         
-        // Setup Next button
-        if (nextButton != null) {
-            if (string.IsNullOrEmpty(nextSceneName)) {
-                nextButton.interactable = false;
-            }
-            else {
-                nextButton.onClick.AddListener(() => SaveAndNavigateToNext(nextSceneName));
-                nextButton.interactable = true;
-            }
-        }
+        Debug.Log($"Penalty applied: ${fineToApply} fine, {pointsToApply} points");
+        Debug.Log(PenaltyTracker.GetPenaltySummary());
     }
-    
-    // Navigation methods for moving between questions
-    public void SaveAndNavigateToNext(string nextSceneName = "")
-    {
-        SaveCurrentSelections();
-        
-        if (string.IsNullOrEmpty(nextSceneName)) {
-            Debug.LogWarning("Next scene name not provided. Navigation cancelled.");
-            return;
-        }
-        
-        Debug.Log($"Navigating to: {nextSceneName}");
-        UnityEngine.SceneManagement.SceneManager.LoadScene(nextSceneName);
-    }
-    
-    public void SaveAndNavigateToPrevious(string previousSceneName = "")
-    {
-        SaveCurrentSelections();
-        
-        if (string.IsNullOrEmpty(previousSceneName)) {
-            Debug.LogWarning("Previous scene name not provided. Navigation cancelled.");
-            return;
-        }
-        
-        Debug.Log($"Navigating to: {previousSceneName}");
-        UnityEngine.SceneManagement.SceneManager.LoadScene(previousSceneName);
-    }
-    
-    // Helper method to check if a scene exists in build settings
-    private bool SceneExistsInBuild(string sceneName)
-    {
-        for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings; i++) {
-            string scenePath = UnityEngine.SceneManagement.SceneUtility.GetScenePathByBuildIndex(i);
-            string sceneNameFromPath = System.IO.Path.GetFileNameWithoutExtension(scenePath);
-            if (sceneNameFromPath == sceneName) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    // Save current selections without confirming the question
-    public void SaveCurrentSelections()
-    {
-        bool answeredCorrectly = CheckIfAnsweredCorrectly();
-        SaveCurrentResult(answeredCorrectly, false); // Don't apply penalties during navigation
-        Debug.Log($"Saved selections for question {questionId}");
-    }
-    
-    // Final confirmation method for the end of the test
+
     public static void FinalConfirmAllAnswers(string resultsSceneName = "Results")
     {
         var allResults = QuestionResults.GetAllResults();
@@ -458,7 +484,6 @@ public class SelectionController : MonoBehaviour
         
         Debug.Log("[FINAL] Answer check for all questions:");
         
-        // Apply penalties for all incorrect answers and log each question
         foreach (var result in allResults) {
             string status = result.wasAnsweredCorrectly ? "✅ Correct" : "❌ Incorrect";
             Debug.Log($"  Question {result.questionId}: {status}");
@@ -469,20 +494,15 @@ public class SelectionController : MonoBehaviour
             }
         }
         
-        // Apply total penalties to penalty tracker
         if (totalPoints > 0) {
             PenaltyTracker.AddPenalty(totalFine, totalPoints);
-        }
-        else if (totalFine > 0) {
+        } else if (totalFine > 0) {
             PenaltyTracker.AddPenalty(totalFine);
         }
         
         Debug.Log($"[FINAL] Test completed! Total penalties: ${totalFine} fine, {totalPoints} points");
         
-        // Mark all questions as finally confirmed
         QuestionResults.MarkAllAsConfirmed();
-        
-        // Navigate to results scene
         UnityEngine.SceneManagement.SceneManager.LoadScene(resultsSceneName);
     }
 }
