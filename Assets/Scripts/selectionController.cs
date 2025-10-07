@@ -8,6 +8,7 @@ public class SelectionController : MonoBehaviour
     [Header("Question Data")]
     [SerializeField] private int questionId = 0;
     [SerializeField] private string questionText = "";
+    [SerializeField] private GameObject questionTextGameObject;
     
     [Header("Button Configuration")]
     [SerializeField] private ButtonConfig[] buttonConfigs = new ButtonConfig[4];
@@ -48,6 +49,8 @@ public class SelectionController : MonoBehaviour
 
     private void InitializeButtons()
     {
+        SetQuestionText();
+        
         for (int i = 0; i < buttonConfigs.Length; i++) {
             if (buttonConfigs[i].buttonGameObject == null) continue;
 
@@ -429,9 +432,28 @@ public class SelectionController : MonoBehaviour
         return questionId;
     }
     
-    public void SetQuestionText(string text)
+    public void SetQuestionText(string text = "")
     {
-        questionText = text;
+        if (!string.IsNullOrEmpty(text)) {
+            questionText = text;
+        }
+        
+        if (questionTextGameObject == null) return;
+        if (string.IsNullOrEmpty(questionText)) return;
+        
+        var textComponent = questionTextGameObject.GetComponentInChildren<Text>();
+        if (textComponent != null) {
+            textComponent.text = questionText;
+            return;
+        }
+        
+        var tmpTextComponent = questionTextGameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+        if (tmpTextComponent != null) {
+            tmpTextComponent.text = questionText;
+            return;
+        }
+        
+        Debug.LogWarning($"No Text or TextMeshProUGUI component found on question text GameObject ({questionTextGameObject.name}). Question text '{questionText}' could not be set.");
     }
     
     public string GetQuestionText()
