@@ -31,6 +31,10 @@ public class SelectionController : MonoBehaviour
     [SerializeField] private string previousSceneName = "";
     [SerializeField] private string nextSceneName = "";
     
+    [Header("UI Toggle Arrows")]
+    [SerializeField] private GameObject upArrowGameObject;   // Shows when UI is hidden (click to show UI)
+    [SerializeField] private GameObject downArrowGameObject; // Shows when UI is visible (click to hide UI)
+    
     [Header("Events")]
     public UnityEvent OnCorrectSelection;
     public UnityEvent OnIncorrectSelection;
@@ -66,6 +70,9 @@ public class SelectionController : MonoBehaviour
         }
 
         SetupNavigationButtons();
+        
+        // Initialize arrow visibility (UI starts visible by default)
+        UpdateArrowVisibility(true);
     }
 
     private void FindCorrectAnswer()
@@ -496,6 +503,66 @@ public class SelectionController : MonoBehaviour
         
         Debug.Log($"Penalty applied: ${fineToApply} fine, {pointsToApply} points");
         Debug.Log(PenaltyTracker.GetPenaltySummary());
+    }
+
+    public void HideUIElements() => SetUIElementsVisibility(true);
+    public void ShowUIElements() => SetUIElementsVisibility(false);
+
+    public void SetUIElementsVisibility(bool hide)
+    {
+        bool isVisible = !hide;
+        string action = hide ? "Hiding" : "Showing";
+        string interface_type = hide ? "dropdown interface" : "dropup interface";
+
+        Debug.Log($"{action} UI elements ({interface_type})");
+
+        // Set question text visibility
+        if (questionTextGameObject != null) {
+            questionTextGameObject.SetActive(isVisible);
+        }
+
+        // Set all button text and button GameObjects visibility
+        for (int i = 0; i < buttonConfigs.Length; i++) {
+            if (buttonConfigs[i].textGameObject != null) {
+                buttonConfigs[i].textGameObject.SetActive(isVisible);
+            }
+            if (buttonConfigs[i].buttonGameObject != null) {
+                buttonConfigs[i].buttonGameObject.SetActive(isVisible);
+            }
+        }
+
+        if (previousButton != null) {
+            bool shouldShow = isVisible && !string.IsNullOrEmpty(previousSceneName);
+            previousButton.gameObject.SetActive(shouldShow);
+        }
+        
+        if (nextButton != null)
+        {
+            bool shouldShow = isVisible && !string.IsNullOrEmpty(nextSceneName);
+            nextButton.gameObject.SetActive(shouldShow);
+        }
+
+        if (confirmButton != null) {
+            confirmButton.gameObject.SetActive(isVisible);
+        }
+        
+        UpdateArrowVisibility(isVisible);
+    }
+    
+    private void UpdateArrowVisibility(bool isUIVisible)
+    {
+        // Show down arrow when UI is visible (user can hide it)
+        // Show up arrow when UI is hidden (user can show it)
+        
+        if (downArrowGameObject != null) {
+            downArrowGameObject.SetActive(isUIVisible);
+        }
+        
+        if (upArrowGameObject != null) {
+            upArrowGameObject.SetActive(!isUIVisible);
+        }
+        
+        Debug.Log($"Arrow visibility updated: Down arrow = {isUIVisible}, Up arrow = {!isUIVisible}");
     }
 
     public static void FinalConfirmAllAnswers(string resultsSceneName = "Results")

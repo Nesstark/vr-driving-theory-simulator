@@ -23,6 +23,9 @@ public class VRButtonInteractor : MonoBehaviour
     [Header("Custom Settings (for Custom type)")]
     [SerializeField] private string customActionName = "";
     
+    [Header("UI Toggle Settings (for UIToggle type)")]
+    [SerializeField] private bool isUIVisible = true; // Track current UI state
+    
     [Header("Visual Feedback")]
     [SerializeField] private Color pressedColor = Color.green;
     [SerializeField] private Color normalColor = Color.white;
@@ -101,8 +104,7 @@ public class VRButtonInteractor : MonoBehaviour
                 break;
                 
             case VRButtonType.UIToggle:
-                Debug.Log($"UI Toggle functionality not yet implemented for button {buttonIndex}");
-                // TODO: Implement UI toggle functionality
+                ToggleUIVisibility();
                 break;
                 
             case VRButtonType.Confirm:
@@ -117,6 +119,26 @@ public class VRButtonInteractor : MonoBehaviour
         }
     }
     
+    private void ToggleUIVisibility()
+    {
+        if (controller == null) {
+            Debug.LogWarning($"UI Toggle button {buttonIndex}: No SelectionController found");
+            return;
+        }
+        
+        if (isUIVisible) {
+            // Currently visible, so hide (dropdown interface)
+            controller.HideUIElements();
+            isUIVisible = false;
+            Debug.Log($"UI Toggle button {buttonIndex}: UI elements hidden (dropdown interface)");
+        } else {
+            // Currently hidden, so show (dropup interface)
+            controller.ShowUIElements();
+            isUIVisible = true;
+            Debug.Log($"UI Toggle button {buttonIndex}: UI elements shown (dropup interface)");
+        }
+    }
+    
     private void ExecuteCustomAction()
     {
         if (string.IsNullOrEmpty(customActionName)) {
@@ -125,7 +147,7 @@ public class VRButtonInteractor : MonoBehaviour
         }
         
         Debug.Log($"Executing custom action: {customActionName}");
-        // TODO: Implement custom action system (could use Unity Events or method reflection) if needed
+        // TODO: Implement custom action system (could use Unity Events or method reflection) if needed. Likely irrelevant
     }
     
     public void SetButtonPressed(bool isPressed)
