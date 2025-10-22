@@ -1391,7 +1391,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 2
+  m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -2449,6 +2449,7 @@ GameObject:
   - component: {fileID: 3174228226091206522}
   - component: {fileID: 3369832128829532577}
   - component: {fileID: 5478638504181763846}
+  - component: {fileID: 3838606340991708374}
   m_Layer: 5
   m_Name: ConfirmInterface
   m_TagString: Untagged
@@ -2590,6 +2591,27 @@ MonoBehaviour:
   isUIVisible: 1
   pressedColor: {r: 0, g: 1, b: 0, a: 1}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!65 &3838606340991708374
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4138727202711599424}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 29.863695, y: 29.925692, z: 1.436519}
+  m_Center: {x: 0.026418334, y: 0.07635778, z: -0.21825954}
 --- !u!1 &4556553417185427412
 GameObject:
   m_ObjectHideFlags: 0

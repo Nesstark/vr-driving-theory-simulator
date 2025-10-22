@@ -83765,6 +83765,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: questionId
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
       propertyPath: questionText
       value: "Du vil k\xF8re lige ud i krydset. Der kommer ingen k\xF8rende bagfra
         i de blinde vinkler. Hvordan vil du forts\xE6tte?"

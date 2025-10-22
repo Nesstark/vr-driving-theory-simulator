@@ -46,6 +46,15 @@ public class SelectionController : MonoBehaviour
     
     void Start()
     {
+        // If questionId was left at the default (0) we'll attempt a safe fallback
+        // so per-scene questions don't overwrite each other. If you intentionally
+        // want questionId == 0, set it explicitly in the inspector.
+        if (questionId == 0) {
+            int sceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+            Debug.LogWarning($"SelectionController: questionId is 0, auto-assigning questionId = scene build index {sceneIndex} for this scene. If you want a different id, set questionId in the inspector.");
+            questionId = sceneIndex;
+        }
+
         InitializeButtons();
         FindCorrectAnswer();
         RestorePreviousAnswers();
@@ -372,12 +381,16 @@ public class SelectionController : MonoBehaviour
     public void SaveAndNavigateToNext(string nextSceneName = "")
     {
         SaveCurrentSelections();
-        
+
+        if (string.IsNullOrEmpty(nextSceneName)) {
+            nextSceneName = this.nextSceneName;
+        }
+
         if (string.IsNullOrEmpty(nextSceneName)) {
             Debug.LogWarning("Next scene name not provided. Navigation cancelled.");
             return;
         }
-        
+
         Debug.Log($"Navigating to: {nextSceneName}");
         UnityEngine.SceneManagement.SceneManager.LoadScene(nextSceneName);
     }
@@ -385,12 +398,16 @@ public class SelectionController : MonoBehaviour
     public void SaveAndNavigateToPrevious(string previousSceneName = "")
     {
         SaveCurrentSelections();
-        
+
+        if (string.IsNullOrEmpty(previousSceneName)) {
+            previousSceneName = this.previousSceneName;
+        }
+
         if (string.IsNullOrEmpty(previousSceneName)) {
             Debug.LogWarning("Previous scene name not provided. Navigation cancelled.");
             return;
         }
-        
+
         Debug.Log($"Navigating to: {previousSceneName}");
         UnityEngine.SceneManagement.SceneManager.LoadScene(previousSceneName);
     }

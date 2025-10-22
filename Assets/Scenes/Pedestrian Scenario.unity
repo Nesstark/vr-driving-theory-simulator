@@ -30180,6 +30180,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: questionId
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
       propertyPath: questionText
       value: "Du k\xF8rer 50 km/t, der komme ingen k\xF8rende bagude. Hvordan vil
         du forts\xE6tte?"
