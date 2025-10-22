@@ -145,9 +145,33 @@ public class VRButtonInteractor : MonoBehaviour
             Debug.LogWarning($"Custom button {buttonIndex} has no action name specified");
             return;
         }
-        
+
         Debug.Log($"Executing custom action: {customActionName}");
-        // TODO: Implement custom action system (could use Unity Events or method reflection) if needed. Likely irrelevant
+
+        // Simple custom-action protocol:
+        //  - "FinalConfirmAllAnswers" => calls SelectionController.FinalConfirmAllAnswers() using default scene name
+        //  - "FinalConfirmAllAnswers:SceneName" => calls SelectionController.FinalConfirmAllAnswers("SceneName")
+        // Before finalizing, confirm the current question so its result is saved.
+
+        // Split on first ':' to allow scene names containing ':' if needed (rare)
+        var parts = customActionName.Split(new char[] { ':' }, 2);
+        var action = parts[0].Trim();
+        var arg = parts.Length > 1 ? parts[1].Trim() : string.Empty;
+
+        if (action.Equals("FinalConfirmAllAnswers", System.StringComparison.OrdinalIgnoreCase)) {
+            // Ensure current question is confirmed/saved first
+            if (controller != null) {
+                controller.ConfirmSelection();
+            } else {
+                Debug.LogWarning($"Custom button {buttonIndex}: No SelectionController found to confirm current question before finalizing");
+            }
+
+            string sceneName = string.IsNullOrEmpty(arg) ? "End scene" : arg;
+            SelectionController.FinalConfirmAllAnswers(sceneName);
+            return;
+        }
+
+        Debug.LogWarning($"Custom action '{customActionName}' not recognized by VRButtonInteractor.");
     }
     
     public void SetButtonPressed(bool isPressed)

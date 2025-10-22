@@ -83770,8 +83770,12 @@ PrefabInstance:
         i de blinde vinkler. Hvordan vil du forts\xE6tte?"
       objectReference: {fileID: 0}
     - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: confirmButton
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
       propertyPath: nextSceneName
-      value: End Scene
+      value: End scene
       objectReference: {fileID: 0}
     - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
       propertyPath: buttonConfigs.Array.data[0].buttonText
@@ -83800,6 +83804,18 @@ PrefabInstance:
     - target: {fileID: 4322519011999213708, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
       propertyPath: m_Name
       value: CarGolf
+      objectReference: {fileID: 0}
+    - target: {fileID: 5478638504181763846, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: buttonType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5478638504181763846, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: isNextButton
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5478638504181763846, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: customActionName
+      value: FinalConfirmAllAnswers:End scene
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

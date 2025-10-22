@@ -30224,6 +30224,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CarGolf
       objectReference: {fileID: 0}
+    - target: {fileID: 5478638504181763846, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: buttonType
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

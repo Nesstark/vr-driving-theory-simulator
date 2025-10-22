@@ -201,6 +201,9 @@ public class SelectionController : MonoBehaviour
         
         bool answeredCorrectly = CheckIfAnsweredCorrectly();
         LogAnswerCheck();
+        
+        // Mark confirmed before saving so the saved result reflects the confirmed state
+        selectionConfirmed = true;
         SaveCurrentResult(answeredCorrectly, false);
         
         if (answeredCorrectly) {
@@ -211,7 +214,6 @@ public class SelectionController : MonoBehaviour
             OnIncorrectSelection?.Invoke();
         }
         
-        selectionConfirmed = true;
         OnSelectionComplete?.Invoke();
         
         if (resetAfterSelection) {
@@ -565,7 +567,7 @@ public class SelectionController : MonoBehaviour
         Debug.Log($"Arrow visibility updated: Down arrow = {isUIVisible}, Up arrow = {!isUIVisible}");
     }
 
-    public static void FinalConfirmAllAnswers(string resultsSceneName = "Results")
+    public static void FinalConfirmAllAnswers(string resultsSceneName = "End scene")
     {
         var allResults = QuestionResults.GetAllResults();
         int totalFine = 0;
