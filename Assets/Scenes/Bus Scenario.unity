@@ -83764,6 +83764,39 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: questionText
+      value: "Du vil k\xF8re lige ud i krydset. Der kommer ingen k\xF8rende bagfra
+        i de blinde vinkler. Hvordan vil du forts\xE6tte?"
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: nextSceneName
+      value: End Scene
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: buttonConfigs.Array.data[0].buttonText
+      value: "Jeg er s\xE6rlig opm\xE6rksom p\xE5 lysreguleringen."
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: buttonConfigs.Array.data[1].buttonText
+      value: "Jeg k\xF8rer frem og standser bagved bussen."
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: buttonConfigs.Array.data[2].buttonText
+      value: Jeg skifter til venstre bane.
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: buttonConfigs.Array.data[3].buttonText
+      value: "Jeg holder til h\xF8jre."
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: buttonConfigs.Array.data[0].isCorrectAnswer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: buttonConfigs.Array.data[3].isCorrectAnswer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4322519011999213708, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
       propertyPath: m_Name
       value: CarGolf

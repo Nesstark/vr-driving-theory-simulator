@@ -30179,6 +30179,47 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: questionText
+      value: "Du k\xF8rer 50 km/t, der komme ingen k\xF8rende bagude. Hvordan vil
+        du forts\xE6tte?"
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: nextSceneName
+      value: Bus Scenario
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: buttonConfigs.Array.data[0].buttonText
+      value: "Jeg forts\xE6tter med u\xE6ndret hastighed 50 km/t."
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: buttonConfigs.Array.data[1].buttonText
+      value: Jeg skifter til venstre bane.
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: buttonConfigs.Array.data[2].buttonText
+      value: Jeg bremser.
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: buttonConfigs.Array.data[3].buttonText
+      value: "Jeg standser og holder tilbage for fodg\xE6ngerne."
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: buttonConfigs.Array.data[0].isCorrectAnswer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: buttonConfigs.Array.data[1].isCorrectAnswer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: buttonConfigs.Array.data[2].isCorrectAnswer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: buttonConfigs.Array.data[3].isCorrectAnswer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4322519011999213708, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
       propertyPath: m_Name
       value: CarGolf
