@@ -500,7 +500,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4476251165409166}
-  - component: {fileID: 114359146128991712}
   m_Layer: 0
   m_Name: RealTrafficLight
   m_TagString: Untagged
@@ -527,29 +526,6 @@ Transform:
   - {fileID: 4043354883893672}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114359146128991712
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1434088669586192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3dc28377d73444347b3c1764574c3829, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RedRenderer: {fileID: 23159995008500084}
-  RedHalo: {fileID: 1193939814111100}
-  RedLight: {fileID: 108837240447615432}
-  YellowRenderer: {fileID: 23647342955538920}
-  YellowHalo: {fileID: 1358351493162856}
-  YellowLight: {fileID: 108807192733226854}
-  GreenRenderer: {fileID: 23849734063050752}
-  GreenHalo: {fileID: 1528636076858008}
-  GreenLight: {fileID: 108756859087283256}
-  LightsOnMat: {fileID: 2100000, guid: 0ab04fff13d1ecc4f82625a094f57220, type: 2}
-  LightsOffMat: {fileID: 2100000, guid: 1a922bc1420bdb94c946879d38be417c, type: 2}
 --- !u!1 &1444826315285874
 GameObject:
   m_ObjectHideFlags: 0
@@ -646,6 +622,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4622311595333128}
   - component: {fileID: 108837240447615432}
+  - component: {fileID: 1369098381780986641}
   m_Layer: 0
   m_Name: red_light
   m_TagString: Untagged
@@ -734,6 +711,29 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!114 &1369098381780986641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1504213955117878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1 &1528636076858008
 GameObject:
   m_ObjectHideFlags: 0
