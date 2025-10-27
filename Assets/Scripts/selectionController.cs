@@ -392,7 +392,7 @@ public class SelectionController : MonoBehaviour
         }
 
         Debug.Log($"Navigating to: {nextSceneName}");
-        UnityEngine.SceneManagement.SceneManager.LoadScene(nextSceneName);
+        ScenarioManager.LoadSceneByName(nextSceneName);
     }
     
     public void SaveAndNavigateToPrevious(string previousSceneName = "")
@@ -409,7 +409,7 @@ public class SelectionController : MonoBehaviour
         }
 
         Debug.Log($"Navigating to: {previousSceneName}");
-        UnityEngine.SceneManagement.SceneManager.LoadScene(previousSceneName);
+        ScenarioManager.LoadSceneByName(previousSceneName);
     }
 
     private bool SceneExistsInBuild(string sceneName)
@@ -611,6 +611,6 @@ public class SelectionController : MonoBehaviour
         Debug.Log($"[FINAL] Test completed! Total penalties: ${totalFine} fine, {totalPoints} points");
         
         QuestionResults.MarkAllAsConfirmed();
-        UnityEngine.SceneManagement.SceneManager.LoadScene(resultsSceneName);
+        ScenarioManager.LoadSceneByName(resultsSceneName);
     }
 }
