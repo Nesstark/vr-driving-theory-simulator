@@ -41,6 +41,6 @@ public static class PenaltyTracker
     
     public static string GetPenaltySummary()
     {
-        return $"Fine: ${_penaltyFine}, Points: {_penaltyPoints}, Suspended: {_isSuspended}";
+        return $"Fine: {_penaltyFine} DKK, Points: {_penaltyPoints}, Suspended: {_isSuspended}";
     }
 }
