@@ -210,7 +210,7 @@ GameObject:
   - component: {fileID: 148711133}
   - component: {fileID: 148711132}
   m_Layer: 4
-  m_Name: RawImage
+  m_Name: LicensePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -652,7 +652,7 @@ GameObject:
   - component: {fileID: 551923187}
   - component: {fileID: 551923186}
   m_Layer: 5
-  m_Name: RawImage
+  m_Name: FinePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1692,6 +1692,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f15fa77f5c3cb46bc8fa9011ed3c47d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  finePanel: {fileID: 551923184}
   fineText: {fileID: 1652114287}
   penaltyIndicators:
   - {fileID: 1152647617}
