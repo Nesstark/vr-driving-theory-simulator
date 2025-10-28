@@ -797,7 +797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38b9f2163b1e8a04793ec130ec91f090, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonType: 0
+  buttonType: 2
   buttonIndex: 0
   controller: {fileID: 0}
   isNextButton: 1
@@ -1682,7 +1682,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38b9f2163b1e8a04793ec130ec91f090, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonType: 0
+  buttonType: 2
   buttonIndex: 0
   controller: {fileID: 0}
   isNextButton: 1
