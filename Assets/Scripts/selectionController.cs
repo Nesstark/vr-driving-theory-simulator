@@ -542,11 +542,9 @@ public class SelectionController : MonoBehaviour
 
         // Set all button text and button GameObjects visibility
         for (int i = 0; i < buttonConfigs.Length; i++) {
-            if (buttonConfigs[i].textGameObject != null) {
-                buttonConfigs[i].textGameObject.SetActive(isVisible);
-            }
-            if (buttonConfigs[i].buttonGameObject != null) {
-                buttonConfigs[i].buttonGameObject.SetActive(isVisible);
+
+            if (buttonConfigs[i].buttonGameObject.transform.parent != null) {
+                buttonConfigs[i].buttonGameObject.transform.parent.gameObject.SetActive(isVisible);
             }
         }
 
