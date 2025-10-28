@@ -96102,6 +96102,10 @@ PrefabInstance:
       value: "Jeg holder til h\xF8jre."
       objectReference: {fileID: 0}
     - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
+      propertyPath: buttonConfigs.Array.data[3].penaltyPoints
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
       propertyPath: buttonConfigs.Array.data[0].isCorrectAnswer
       value: 1
       objectReference: {fileID: 0}
