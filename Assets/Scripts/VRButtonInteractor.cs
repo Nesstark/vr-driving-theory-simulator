@@ -94,12 +94,19 @@ public class VRButtonInteractor : MonoBehaviour
                 break;
                 
             case VRButtonType.Navigation:
-                if (controller != null) {
-                    if (isNextButton) {
-                        controller.SaveAndNavigateToNext();
-                    } else {
-                        controller.SaveAndNavigateToPrevious();
-                    }
+                // Prevent navigation if the user hasn't made any selection yet
+                if (controller == null) {
+                    Debug.LogWarning($"Navigation button {buttonIndex}: No SelectionController found");
+                    return;
+                }
+                if (!controller.HasSelectionBeenMade()) {
+                    Debug.Log($"Navigation button {buttonIndex}: No selection made yet — navigation suppressed.");
+                    return;
+                }
+                if (isNextButton) {
+                    controller.SaveAndNavigateToNext();
+                } else {
+                    controller.SaveAndNavigateToPrevious();
                 }
                 break;
                 
@@ -114,6 +121,15 @@ public class VRButtonInteractor : MonoBehaviour
                 break;
                 
             case VRButtonType.Custom:
+                // Prevent custom actions that should only run after the user has selected an answer
+                if (controller == null) {
+                    Debug.LogWarning($"Custom button {buttonIndex}: No SelectionController found");
+                    return;
+                }
+                if (!controller.HasSelectionBeenMade()) {
+                    Debug.Log($"Custom button {buttonIndex}: No selection made yet — custom action suppressed.");
+                    return;
+                }
                 ExecuteCustomAction();
                 break;
         }
