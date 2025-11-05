@@ -165,7 +165,7 @@ GameObject:
   - component: {fileID: 2172962824684920671}
   - component: {fileID: 6762049993102992093}
   m_Layer: 0
-  m_Name: RightCollide
+  m_Name: LeftCollider
   m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -179,12 +179,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 200572914295514454}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.3025052, y: 0.21851595, z: 0.6268851, w: 0.6839272}
-  m_LocalPosition: {x: -0.0167, y: -0.0109, z: 0.0921}
-  m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
+  m_LocalRotation: {x: 0.30250525, y: 0.21851595, z: 0.6268851, w: 0.68392724}
+  m_LocalPosition: {x: -0.016700074, y: -0.010900021, z: 0.092099994}
+  m_LocalScale: {x: 0.019999996, y: 0.019999998, z: 0.020000001}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7721623265186906494}
+  m_Father: {fileID: 3325802378643749611}
   m_LocalEulerAnglesHint: {x: 8.037, y: 43.228, z: 88.205}
 --- !u!65 &6762049993102992093
 BoxCollider:
@@ -931,7 +931,7 @@ GameObject:
   - component: {fileID: 9040693651564345585}
   - component: {fileID: 3226727371033219512}
   m_Layer: 0
-  m_Name: LeftCollide
+  m_Name: RightCollider
   m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -945,12 +945,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1353552244325997256}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.56763834, y: 0.7242762, z: 0.32491952, w: 0.21826157}
-  m_LocalPosition: {x: 0.0135, y: -0.0159, z: 0.0926}
+  m_LocalRotation: {x: 0.5676384, y: 0.7242762, z: 0.32491952, w: 0.21826155}
+  m_LocalPosition: {x: 0.013499941, y: -0.015899897, z: 0.09260004}
   m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3325802378643749611}
+  m_Father: {fileID: 7721623265186906494}
   m_LocalEulerAnglesHint: {x: -12.878, y: 135.355, z: 81.48}
 --- !u!65 &3226727371033219512
 BoxCollider:
@@ -1242,7 +1242,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 898049581408191225}
-  - {fileID: 9040693651564345585}
+  - {fileID: 2172962824684920671}
   m_Father: {fileID: 2730545071169802511}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8253294166289722771
@@ -4790,7 +4790,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7278724046788744924}
-  - {fileID: 2172962824684920671}
+  - {fileID: 9040693651564345585}
   m_Father: {fileID: 2730545071169802511}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9006032690838054347
