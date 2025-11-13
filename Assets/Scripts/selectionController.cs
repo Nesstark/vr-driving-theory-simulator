@@ -326,18 +326,14 @@ public class SelectionController : MonoBehaviour
         result.penaltyPointsApplied = totalPoints;
         
         if (applyPenalties && !answeredCorrectly) {
-            if (totalPoints > 0) {
-                PenaltyTracker.AddPenalty(totalFine, totalPoints);
-            } else if (totalFine > 0) {
-                PenaltyTracker.AddPenalty(totalFine);
-            }
-            
+            // Log penalty calculation for debugging, but don't apply to PenaltyTracker yet
+            // Penalties will be applied later in FinalConfirmAllAnswers()
             if (totalFine > 0 && totalPoints > 0) {
-                Debug.Log($"[Question {questionId}] Penalty applied: ${totalFine} fine, {totalPoints} points");
+                Debug.Log($"[Question {questionId}] Penalty calculated: ${totalFine} fine, {totalPoints} points (will be applied at end)");
             } else if (totalFine > 0) {
-                Debug.Log($"[Question {questionId}] Penalty applied: ${totalFine} fine");
+                Debug.Log($"[Question {questionId}] Penalty calculated: ${totalFine} fine (will be applied at end)");
             } else if (totalPoints > 0) {
-                Debug.Log($"[Question {questionId}] Penalty applied: {totalPoints} points");
+                Debug.Log($"[Question {questionId}] Penalty calculated: {totalPoints} points (will be applied at end)");
             }
         }
         
@@ -591,7 +587,8 @@ public class SelectionController : MonoBehaviour
             PenaltyTracker.AddPenalty(totalFine);
         }
         
-        Debug.Log($"[FINAL] Test completed! Total penalties: ${totalFine} fine, {totalPoints} points");
+        Debug.Log($"[FINAL] Test completed! Total penalties calculated: ${totalFine} fine, {totalPoints} points");
+        Debug.Log($"[FINAL] PenaltyTracker final state: {PenaltyTracker.GetPenaltySummary()}");
         
         QuestionResults.MarkAllAsConfirmed();
         ScenarioManager.LoadSceneByName(resultsSceneName);
