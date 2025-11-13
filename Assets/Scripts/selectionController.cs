@@ -306,26 +306,39 @@ public class SelectionController : MonoBehaviour
         result.wasAnsweredCorrectly = answeredCorrectly;
         result.wasConfirmed = selectionConfirmed;
         
+        // Calculate fines per incorrect button selected
         int totalFine = 0;
-        int totalPoints = 0;
         for (int i = 0; i < buttonConfigs.Length; i++) {
             if (!buttonConfigs[i].isSelected || buttonConfigs[i].isCorrectAnswer) continue;
             
+            // Add fine for each incorrect button selected
             int fine = buttonConfigs[i].fineAmount > 0 ? buttonConfigs[i].fineAmount : defaultFineAmount;
-            int points = buttonConfigs[i].penaltyPoints > 0 ? buttonConfigs[i].penaltyPoints : defaultPenaltyPoints;
             totalFine += fine;
-            totalPoints += points;
         }
+        
+        // Apply penalty points once per question if answered incorrectly
+        int totalPoints = 0;
+        if (!answeredCorrectly) {
+            totalPoints = defaultPenaltyPoints;
+        }
+        
         result.penaltyFineApplied = totalFine;
         result.penaltyPointsApplied = totalPoints;
         
         if (applyPenalties && !answeredCorrectly) {
             if (totalPoints > 0) {
                 PenaltyTracker.AddPenalty(totalFine, totalPoints);
-            } else {
+            } else if (totalFine > 0) {
                 PenaltyTracker.AddPenalty(totalFine);
             }
-            Debug.Log($"[Question {questionId}] Penalty applied: ${totalFine} fine, {totalPoints} points");
+            
+            if (totalFine > 0 && totalPoints > 0) {
+                Debug.Log($"[Question {questionId}] Penalty applied: ${totalFine} fine, {totalPoints} points");
+            } else if (totalFine > 0) {
+                Debug.Log($"[Question {questionId}] Penalty applied: ${totalFine} fine");
+            } else if (totalPoints > 0) {
+                Debug.Log($"[Question {questionId}] Penalty applied: {totalPoints} points");
+            }
         }
         
         QuestionResults.SaveResult(result);
@@ -412,16 +425,6 @@ public class SelectionController : MonoBehaviour
         ScenarioManager.LoadSceneByName(previousSceneName);
     }
 
-    private bool SceneExistsInBuild(string sceneName)
-    {
-        for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings; i++) {
-            string scenePath = UnityEngine.SceneManagement.SceneUtility.GetScenePathByBuildIndex(i);
-            string sceneNameFromPath = System.IO.Path.GetFileNameWithoutExtension(scenePath);
-            if (sceneNameFromPath == sceneName) return true;
-        }
-        return false;
-    }
-
     public void SetCorrectAnswer(int buttonIndex)
     {
         if (correctAnswerIndex >= 0) {
@@ -434,12 +437,11 @@ public class SelectionController : MonoBehaviour
         correctAnswerIndex = buttonIndex;
     }
     
-    public void SetButtonPenalty(int buttonIndex, int fineAmount, int penaltyPoints = 0)
+    public void SetButtonPenalty(int buttonIndex, int fineAmount)
     {
         if (buttonIndex < 0 || buttonIndex >= buttonConfigs.Length) return;
         
         buttonConfigs[buttonIndex].fineAmount = fineAmount;
-        buttonConfigs[buttonIndex].penaltyPoints = penaltyPoints;
     }
     
     public void SetDefaultPenalty(int fineAmount, int penaltyPoints = 0)
@@ -505,23 +507,6 @@ public class SelectionController : MonoBehaviour
     {
         var result = QuestionResults.GetResult(questionId);
         return result != null && result.wasConfirmed && result.wasAnsweredCorrectly;
-    }
-
-    private void ApplyPenalty(int buttonIndex)
-    {
-        ButtonConfig incorrectButton = buttonConfigs[buttonIndex];
-        
-        int fineToApply = incorrectButton.fineAmount > 0 ? incorrectButton.fineAmount : defaultFineAmount;
-        int pointsToApply = incorrectButton.penaltyPoints > 0 ? incorrectButton.penaltyPoints : defaultPenaltyPoints;
-        
-        if (pointsToApply > 0) {
-            PenaltyTracker.AddPenalty(fineToApply, pointsToApply);
-        } else {
-            PenaltyTracker.AddPenalty(fineToApply);
-        }
-        
-        Debug.Log($"Penalty applied: ${fineToApply} fine, {pointsToApply} points");
-        Debug.Log(PenaltyTracker.GetPenaltySummary());
     }
 
     public void HideUIElements() => SetUIElementsVisibility(true);

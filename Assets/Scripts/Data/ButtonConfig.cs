@@ -14,7 +14,6 @@ public class ButtonConfig
     
     [Header("Penalty Settings")]
     public int fineAmount = 0;
-    public int penaltyPoints = 0;
     
     [HideInInspector]
     public bool isSelected = false;
