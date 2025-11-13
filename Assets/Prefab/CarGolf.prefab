@@ -1843,28 +1843,24 @@ MonoBehaviour:
     isCorrectAnswer: 0
     buttonText: "Jeg tr\xE6kker ud til h\xF8jre."
     fineAmount: 0
-    penaltyPoints: 0
     isSelected: 0
   - textGameObject: {fileID: 4686803715239751035}
     buttonGameObject: {fileID: 7440707444380685186}
     isCorrectAnswer: 0
     buttonText: Jeg standser.
     fineAmount: 0
-    penaltyPoints: 0
     isSelected: 0
   - textGameObject: {fileID: 3114106850130872035}
     buttonGameObject: {fileID: 6132699769130428623}
     isCorrectAnswer: 1
     buttonText: Jeg blinker med forlygterne.
     fineAmount: 0
-    penaltyPoints: 0
     isSelected: 0
   - textGameObject: {fileID: 7590751092498325000}
     buttonGameObject: {fileID: 5190083535111323067}
     isCorrectAnswer: 1
     buttonText: "Jeg forts\xE6tter med u\xE6ndret eller lidt nedsat hastighed."
     fineAmount: 0
-    penaltyPoints: 0
     isSelected: 0
   allowMultipleSelections: 1
   feedbackDuration: 2
@@ -2508,17 +2504,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4138727202711599424}
-  m_LocalRotation: {x: -0, y: -0, z: 8.881782e-16, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 3.5527124e-15, y: 0.1897899, z: 1.7763562e-15, w: 0.98182476}
+  m_LocalPosition: {x: 0, y: 0, z: -0.9}
   m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4834988516681688467}
   m_Father: {fileID: 6391461576017679227}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 21.881, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 4.0999527, y: -6.949997}
+  m_AnchoredPosition: {x: 11.22, y: -6.95}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4941228781729886286
@@ -3578,17 +3574,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6279309064278396649}
-  m_LocalRotation: {x: -0, y: -0, z: 8.881782e-16, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.0000339632}
+  m_LocalRotation: {x: 3.5527124e-15, y: 0.1897899, z: 1.7763562e-15, w: 0.98182476}
+  m_LocalPosition: {x: 0, y: 0, z: -0.9}
   m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8238736326399034112}
   m_Father: {fileID: 6391461576017679227}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 21.881, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 11.73283, y: -3.4558454}
+  m_AnchoredPosition: {x: 11.37, y: -3.46}
   m_SizeDelta: {x: 200, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5776282716545430892

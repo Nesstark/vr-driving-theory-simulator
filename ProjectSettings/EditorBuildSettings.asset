@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Test Scenes/Buttons Test/Question 1.unity
     guid: 344b7d2cfb6540d40a58048aacd4af82
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Main Menu.unity
     guid: 30cd3fff3532898449c947bab642947e
   - enabled: 1
