@@ -20,7 +20,7 @@ public class SelectionController : MonoBehaviour
     
     [Header("Default Penalty (if no button-specific penalty is set)")]
     [SerializeField] private int defaultFineAmount = 250;
-    [SerializeField] private int defaultPenaltyPoints = 0;
+    [SerializeField] private int defaultPenaltyPoints = 1;
     
     [Header("Confirmation")]
     [SerializeField] private Button confirmButton;
