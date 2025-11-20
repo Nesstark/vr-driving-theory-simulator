@@ -581,10 +581,12 @@ public class SelectionController : MonoBehaviour
             }
         }
         
+        if (totalFine > 0) {
+            PenaltyTracker.AddPenaltyFine(totalFine);
+        }
+        
         if (totalPoints > 0) {
-            PenaltyTracker.AddPenalty(totalFine, totalPoints);
-        } else if (totalFine > 0) {
-            PenaltyTracker.AddPenalty(totalFine);
+            PenaltyTracker.AddPenaltyPoint(totalPoints);
         }
         
         Debug.Log($"[FINAL] Test completed! Total penalties calculated: ${totalFine} fine, {totalPoints} points");

@@ -9,14 +9,13 @@ public static class PenaltyTracker
     public static int PenaltyFine => _penaltyFine;
     public static int PenaltyPoints => _penaltyPoints;
     
-    public static void AddPenalty(int fineAmount)
+    public static void AddPenaltyFine(int fineAmount)
     {
         _penaltyFine += fineAmount;
     }
     
-    public static void AddPenalty(int fineAmount, int penaltyAmount)
+    public static void AddPenaltyPoint(int penaltyAmount)
     {
-        _penaltyFine += fineAmount;
         _penaltyPoints += penaltyAmount;
     }
 
