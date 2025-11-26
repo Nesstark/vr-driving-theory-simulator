@@ -56,96 +56,79 @@ public class Results : MonoBehaviour
         var map = new System.Collections.Generic.Dictionary<int, QuestionResult>();
         foreach (var r in allResults) map[r.questionId] = r;
 
-        for (int p = 0; p < questionPanels.Length; p++)
-        {
+        for (int p = 0; p < questionPanels.Length; p++) {
             var panel = questionPanels[p];
             if (panel == null || panel.root == null) continue;
 
             // Try to get saved result for this panel's question id
-            if (!map.TryGetValue(panel.questionId, out QuestionResult result))
-            {
+            if (!map.TryGetValue(panel.questionId, out QuestionResult result)) {
                 // No saved result: hide indicators and leave texts as-is
-                if (panel.checkObjects != null)
-                {
+                if (panel.checkObjects != null) {
                     foreach (var go in panel.checkObjects) if (go != null) go.SetActive(false);
                 }
-                if (panel.crossObjects != null)
-                {
+
+                if (panel.crossObjects != null) {
                     foreach (var go in panel.crossObjects) if (go != null) go.SetActive(false);
                 }
+                
                 continue;
-            }
-
-            // Populate texts from saved QuestionResult.buttonTexts.
-            // Discover TextMeshProUGUI children under the panel root at runtime so we don't need
-            // to assign them manually in the inspector.
-            TMPro.TextMeshProUGUI[] discoveredTexts = new TMPro.TextMeshProUGUI[0];
-            if (panel.root != null)
-            {
-                discoveredTexts = panel.root.GetComponentsInChildren<TMPro.TextMeshProUGUI>(true);
-            }
-
-            int textsToSet = 0;
-            if (result.buttonTexts != null) textsToSet = result.buttonTexts.Length;
-            int maxTextCount = Mathf.Min(discoveredTexts.Length, textsToSet);
-            for (int i = 0; i < maxTextCount; i++)
-            {
-                if (discoveredTexts[i] == null) continue;
-                discoveredTexts[i].text = result.buttonTexts[i] ?? string.Empty;
-            }
-
-            // Apply global font size override if requested to discovered texts
-            if (overrideAnswerFontSize > 0f && discoveredTexts != null)
-            {
-                for (int i = 0; i < discoveredTexts.Length; i++)
-                {
-                    if (discoveredTexts[i] == null) continue;
-                    discoveredTexts[i].fontSize = overrideAnswerFontSize;
-                }
             }
 
             // Determine how many answer entries to iterate: prefer saved texts length, otherwise use indicator lengths
             int textsLen = (result.buttonTexts != null) ? result.buttonTexts.Length : 0;
             int maxLen = Mathf.Max(Mathf.Max(panel.checkObjects?.Length ?? 0, panel.crossObjects?.Length ?? 0), textsLen);
-            for (int i = 0; i < maxLen; i++)
-            {
+            for (int i = 0; i < maxLen; i++) {
                 bool isCorrect = result.correctButtonIndices != null && System.Array.IndexOf(result.correctButtonIndices, i) >= 0;
                 bool isSelected = result.selectedButtonIndices != null && System.Array.IndexOf(result.selectedButtonIndices, i) >= 0;
 
                 // Indicator handling using simple GameObjects (check / cross) assigned in the panel
                 GameObject checkObj = (panel.checkObjects != null && i < panel.checkObjects.Length) ? panel.checkObjects[i] : null;
                 GameObject crossObj = (panel.crossObjects != null && i < panel.crossObjects.Length) ? panel.crossObjects[i] : null;
+                GameObject answerChosenTextObj = (panel.UserAnswerText != null && i < panel.UserAnswerText.Length) ? panel.UserAnswerText[i] : null;
+                GameObject answerOptionTextObj = (panel.AnswerOptionText != null && i < panel.AnswerOptionText.Length) ? panel.AnswerOptionText[i] : null;
 
-                // New requested logic (swapped):
-                // - ICON/SHAPE is based on correctness: correct -> check, incorrect -> cross
-                // - COLOR is based on selection state:
-                //     selected correct -> green
-                //     missed correct (correct but not selected) -> yellow
-                //     incorrect -> red
-                Color indicatorColor;
-                if (isCorrect)
-                {
-                    indicatorColor = isSelected ? correctIndicatorColor : missedCorrectIndicatorColor;
-
-                    // show check icon for correct answers
-                    if (checkObj != null)
-                    {
-                        checkObj.SetActive(true);
-                        SetIndicatorColor(checkObj, indicatorColor);
-                    }
-                    if (crossObj != null) crossObj.SetActive(false);
+                if (answerOptionTextObj != null) {
+                    answerOptionTextObj.GetComponent<TextMeshProUGUI>().text = result.buttonTexts[i] ?? string.Empty;
+                    if (overrideAnswerFontSize > 0f) answerOptionTextObj.GetComponent<TextMeshProUGUI>().fontSize = overrideAnswerFontSize;
                 }
-                else
-                {
-                    indicatorColor = incorrectIndicatorColor;
 
-                    // show cross icon for incorrect answers
-                    if (crossObj != null)
-                    {
-                        crossObj.SetActive(true);
-                        SetIndicatorColor(crossObj, indicatorColor);
+                checkObj.SetActive(false);
+                crossObj.SetActive(false);
+
+                if (isCorrect && isSelected) {
+                    answerChosenTextObj.GetComponent<TextMeshProUGUI>().text = "Ja";
+
+                    if (checkObj != null) {
+                        checkObj.SetActive(true);
+                        SetIndicatorColor(checkObj, correctIndicatorColor);
                     }
-                    if (checkObj != null) checkObj.SetActive(false);
+                }
+
+                if (isCorrect && !isSelected) {
+                    answerChosenTextObj.GetComponent<TextMeshProUGUI>().text = "Nej";
+
+                    if (crossObj != null) {
+                        crossObj.SetActive(true);
+                        SetIndicatorColor(crossObj, incorrectIndicatorColor);
+                    }
+                }
+
+                if (!isCorrect && isSelected) {
+                    answerChosenTextObj.GetComponent<TextMeshProUGUI>().text = "Ja";
+
+                    if (crossObj != null) {
+                        crossObj.SetActive(true);
+                        SetIndicatorColor(crossObj, incorrectIndicatorColor);
+                    }
+                }
+                
+                if (!isCorrect && !isSelected) {
+                    answerChosenTextObj.GetComponent<TextMeshProUGUI>().text = "Nej";
+
+                    if (checkObj != null) {
+                        checkObj.SetActive(true);
+                        SetIndicatorColor(checkObj, correctIndicatorColor);
+                    }
                 }
             }
         }
@@ -162,6 +145,8 @@ public class Results : MonoBehaviour
         public GameObject[] checkObjects = new GameObject[4];
         [Tooltip("GameObjects for cross indicators (one per answer). These will be enabled/disabled by the script.")]
         public GameObject[] crossObjects = new GameObject[4];
+        public GameObject[] UserAnswerText = new GameObject[4];
+        public GameObject[] AnswerOptionText = new GameObject[4];
     }
 
     // Try to set the color on a variety of common indicator types (UI Image, SpriteRenderer, Renderer).

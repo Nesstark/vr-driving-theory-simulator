@@ -30334,19 +30334,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
       propertyPath: buttonConfigs.Array.data[0].isCorrectAnswer
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
       propertyPath: buttonConfigs.Array.data[1].isCorrectAnswer
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
       propertyPath: buttonConfigs.Array.data[2].isCorrectAnswer
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4005958003665143334, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
       propertyPath: buttonConfigs.Array.data[3].isCorrectAnswer
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4322519011999213708, guid: bccf96abdea84a44d9faf0196d19e9f8, type: 3}
       propertyPath: m_Name
