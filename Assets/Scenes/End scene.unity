@@ -8854,7 +8854,7 @@ MonoBehaviour:
     - {fileID: 619727767}
     - {fileID: 1348727912}
     - {fileID: 2102637626}
-  overrideAnswerFontSize: 22
+  overrideAnswerFontSize: 24
   correctIndicatorColor: {r: 0.2, g: 0.8, b: 0.2, a: 1}
   incorrectIndicatorColor: {r: 0.9, g: 0.2, b: 0.2, a: 1}
   missedCorrectIndicatorColor: {r: 1, g: 0.85, b: 0.2, a: 1}
